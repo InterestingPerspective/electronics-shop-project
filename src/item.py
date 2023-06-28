@@ -36,8 +36,8 @@ class Item:
     @classmethod
     def instantiate_from_csv(cls):
         """Инициализирует экземпляры класса Item данными из файла src/items.csv"""
-        path = os.path.abspath("../src/items.csv")
-        with open(path) as csvfile:
+        path = os.path.dirname(__file__)
+        with open(os.path.join(path, "items.csv")) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 __name, price, quantity = row["name"], float(row["price"]), cls.string_to_number(row["quantity"])
