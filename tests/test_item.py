@@ -40,3 +40,13 @@ def test_string_to_number():
     assert item1.quantity == 1
     item5 = Item.all[4]
     assert item5.quantity == 5
+
+
+def test_repr(coll):
+    assert repr(coll) == "Item('Смартфон', 10000, 20)"
+    assert repr(Item.all[4]) == "Item('Клавиатура', 75.0, 5)"
+
+
+def test_str(coll):
+    assert str(coll) == "Смартфон"
+    assert str(Item.all[4]) == "Клавиатура"
