@@ -28,6 +28,11 @@ class Item:
     def __str__(self):
         return f"{self.__name}"
 
+    def __add__(self, other):
+        if isinstance(other, Item):
+            return self.quantity + other.quantity
+        raise ValueError("Складывать можно только объекты классов Item и Phone.")
+
     @property
     def name(self):
         return self.__name

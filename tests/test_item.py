@@ -50,3 +50,23 @@ def test_repr(coll):
 def test_str(coll):
     assert str(coll) == "Смартфон"
     assert str(Item.all[4]) == "Клавиатура"
+
+
+class Auto:
+    def __init__(self, name, price, quantity):
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+
+    def __add__(self, other):
+        return self.quantity + other.quantity
+
+
+def test_add():
+    item1 = Item("Смартфон", 10000, 20)
+    item5 = Item("Клавиатура", 75, 5)
+    auto1 = Auto("Машина", 200000, 3)
+
+    assert item1 + item5 == 25
+    with pytest.raises(ValueError):
+        item1 + auto1
