@@ -11,7 +11,7 @@ def test_init(coll):
     assert coll.name == "iPhone 14"
     assert coll.price == 120000
     assert coll.quantity == 5
-    assert coll.sim == 2
+    assert coll.number_of_sim == 2
 
 
 def test_repr(coll):
@@ -23,4 +23,4 @@ def test_number_of_sim(coll):
         coll.number_of_sim = 0
 
     coll.number_of_sim = 2
-    assert coll.sim == 2
+    assert coll.number_of_sim == 2
