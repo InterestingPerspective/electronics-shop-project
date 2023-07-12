@@ -48,12 +48,24 @@ class Item:
     def instantiate_from_csv(cls):
         """Инициализирует экземпляры класса Item данными из файла src/items.csv"""
         path = os.path.dirname(__file__)
-        with open(os.path.join(path, "items.csv")) as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                __name, price, quantity = row["name"], float(row["price"]), cls.string_to_number(row["quantity"])
-                item = cls(__name, price, quantity)
-                cls.all.append(item)
+        file = os.path.join(path, "items.csv")
+        try:
+            with open(file) as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    if len(row) != 3 or None in row.keys() or None in row.values():
+                        raise InstantiateCSVError("Файл item.csv поврежден")
+        except FileNotFoundError:
+            print("Отсутствует файл item.csv")
+        except InstantiateCSVError as e:
+            print(e)
+        else:
+            with open(file) as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    __name, price, quantity = row["name"], float(row["price"]), cls.string_to_number(row["quantity"])
+                    item = cls(__name, price, quantity)
+                    cls.all.append(item)
 
     @staticmethod
     def string_to_number(string_number):
@@ -73,3 +85,8 @@ class Item:
         Применяет установленную скидку для конкретного товара.
         """
         self.price *= Item.pay_rate
+
+
+class InstantiateCSVError(Exception):
+    def __init__(self, message):
+        self.message = message

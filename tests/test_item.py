@@ -1,10 +1,28 @@
+import os
 import pytest
-from src.item import Item
+import csv
+from src.item import Item, InstantiateCSVError
 
 
 @pytest.fixture
 def coll():
     return Item("Смартфон", 10000, 20)
+
+
+def instantiate_from_csv_test_1():
+    with open("tests/test_1.csv") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            if len(row) != 3 or None in row.keys() or None in row.values():
+                raise InstantiateCSVError("Файл item.csv поврежден")
+
+
+def instantiate_from_csv_test_2():
+    with open("tests/test_2.csv") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            if len(row) != 3 or None in row.keys() or None in row.values():
+                raise InstantiateCSVError("Файл item.csv поврежден")
 
 
 def test_calculate_total_price(coll):
@@ -29,6 +47,18 @@ def test_instantiate_from_csv():
 
     item1.name = "СуперСмартфон"
     assert item1.name == "СуперСмарт"
+
+    with pytest.raises(FileNotFoundError):
+        path = os.path.dirname(__file__)
+        file = os.path.join(path, "nonexistent.csv")
+        with open(file) as csvfile:
+            reader = csv.DictReader(csvfile)
+
+    with pytest.raises(InstantiateCSVError):
+        instantiate_from_csv_test_1()
+
+    with pytest.raises(InstantiateCSVError):
+        instantiate_from_csv_test_2()
 
 
 def test_string_to_number():
